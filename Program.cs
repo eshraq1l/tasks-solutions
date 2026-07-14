@@ -375,3 +375,30 @@ public static class Case18
         }
     }
 }
+
+// Case 19 - Set Student Security PIN [Write-Only Property]
+public static class Case19
+{
+    public static void Run(Student s1, Student s2)
+    {
+        Console.WriteLine("--- Case 19: Set Student Security PIN (Write-Only Property) ---");
+        Student chosen = InputHelper.ChooseStudent(s1, s2);
+
+        int pin;
+        while (true)
+        {
+            Console.Write("Enter a 4-digit PIN: ");
+            string input = Console.ReadLine()!;
+            if (input != null && input.Length == 4 && int.TryParse(input, out pin))
+            {
+                break;
+            }
+            Console.WriteLine("Invalid PIN. It must be exactly 4 digits.");
+        }
+
+        // The property cannot be read back - only written to
+        chosen.SecurityPin = pin;
+
+        Console.WriteLine("PIN set successfully for {chosen.Name}.");
+    }
+}
