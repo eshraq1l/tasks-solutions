@@ -172,3 +172,32 @@ public static class Case09
         }
     }
 }
+
+// Case 10 - Update Student Grade (Validated)
+public static class Case10
+{
+    public static void Run(Student s1, Student s2)
+    {
+        Console.WriteLine("--- Case 10: Update Student Grade (Validated) ---");
+        Student chosen = InputHelper.ChooseStudent(s1, s2);
+
+        Console.Write("Enter new grade: ");
+        string input = Console.ReadLine()!;
+
+        int grade;
+        if (!int.TryParse(input, out grade))
+        {
+            Console.WriteLine("Update rejected: the value entered is not a valid number. No change was made.");
+            return;
+        }
+
+        if (grade < 0 || grade > 100)
+        {
+            Console.WriteLine("Update rejected: grade must be between 0 and 100. No change was made.");
+            return;
+        }
+
+        chosen.Grade = grade;
+        Console.WriteLine($"{chosen.Name}'s grade was updated to {chosen.Grade}.");
+    }
+}
