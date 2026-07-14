@@ -297,3 +297,25 @@ public static class Case14
         }
     }
 }
+
+// Case 15 - Full Balance Top-Up Flow
+public static class Case15
+{
+    public static void Run(BankAccount acc1, BankAccount acc2)
+    {
+        Console.WriteLine("--- Case 15: Full Balance Top-Up Flow ---");
+        BankAccount chosen = InputHelper.ChooseAccount(acc1, acc2);
+        double before = chosen.Balance;
+
+        if (before < 50)
+        {
+            double topUp = 100 - before;
+            chosen.Deposit(topUp);
+            Console.WriteLine("Balance before: {before:F3} | Topped up by: {topUp:F3} | Balance after: {chosen.Balance:F3}");
+        }
+        else
+        {
+            Console.WriteLine("No top-up needed. Balance is already 50 or above.");
+        }
+    }
+}
