@@ -266,3 +266,34 @@ public static class Case13
         Console.WriteLine($"Sale completed. Total revenue: {revenue:F3}");
     }
 }
+
+// Case 14 - Scholarship Eligibility Check
+public static class Case14
+{
+    public static void Run(Student s1, Student s2, BankAccount acc1, BankAccount acc2)
+    {
+        Console.WriteLine("--- Case 14: Scholarship Eligibility Check ---");
+        Student student = InputHelper.ChooseStudent(s1, s2);
+        BankAccount account = InputHelper.ChooseAccount(acc1, acc2);
+
+        bool gradeOk = student.Grade >= 80;
+        bool balanceOk = account.Balance >= 100;
+
+        if (gradeOk && balanceOk)
+        {
+            Console.WriteLine("Eligible");
+        }
+        else
+        {
+            Console.WriteLine("Not Eligible. Reason(s):");
+            if (!gradeOk)
+            {
+                Console.WriteLine($" - Grade ({student.Grade}) is below the required 80.");
+            }
+            if (!balanceOk)
+            {
+                Console.WriteLine($" - Balance ({account.Balance:F3}) is below the required 100.");
+            }
+        }
+    }
+}
