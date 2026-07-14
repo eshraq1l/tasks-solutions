@@ -356,3 +356,22 @@ public static class Case17
         Console.WriteLine($"Total Student objects created so far: {total}");
     }
 }
+
+// Case 18 - Overdrawn Account Check [Read-Only Property]
+public static class Case18
+{
+    public static void Run(BankAccount acc1, BankAccount acc2)
+    {
+        Console.WriteLine("--- Case 18: Overdrawn Account Check (Read-Only Property) ---");
+        BankAccount chosen = InputHelper.ChooseAccount(acc1, acc2);
+
+        if (chosen.IsOverdrawn)
+        {
+            Console.WriteLine("{chosen.HolderName}'s account is currently OVERDRAWN.");
+        }
+        else
+        {
+            Console.WriteLine("{chosen.HolderName}'s account is not overdrawn.");
+        }
+    }
+}
