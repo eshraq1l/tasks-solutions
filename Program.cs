@@ -53,6 +53,20 @@ public static class Case04
 
         // Withdraw() itself already protects against overdrawing
         chosen.Withdraw(amount);
-        Console.WriteLine($"Updated balance: {chosen.Balance:F3}");
+        Console.WriteLine("Updated balance: {chosen.Balance:F3}");
+    }
+}
+
+
+// Case 5 - View Product Details
+public static class Case05
+{
+    public static void Run(Product p1, Product p2)
+    {
+        Console.WriteLine("--- Case 5: View Product Details ---");
+        Product chosen = InputHelper.ChooseProduct(p1, p2);
+        double value = chosen.GetInventoryValue();
+
+        Console.WriteLine("Total Inventory Value: {value:F3}");
     }
 }
