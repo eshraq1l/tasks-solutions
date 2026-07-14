@@ -319,3 +319,26 @@ public static class Case15
         }
     }
 }
+
+
+// Case 16 - Quick Account Opening [Parameterized Constructor]
+public static class Case16
+{
+    public static BankAccount Run()
+    {
+        Console.WriteLine("--- Case 16: Quick Account Opening (Parameterized Constructor) ---");
+        int accNum = InputHelper.ReadInt("Enter new account number: ");
+        Console.Write("Enter holder name: ");
+        string name = Console.ReadLine()!;
+        double startBalance = InputHelper.ReadDouble("Enter starting balance: ");
+
+        // Created using ONLY the parameterized constructor - no separate
+        // property assignments afterward.
+        BankAccount account = new BankAccount(accNum, name, startBalance);
+
+        Console.WriteLine("New account created successfully:");
+        account.CheckBalance();
+
+        return account;
+    }
+}
