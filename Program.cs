@@ -26,7 +26,7 @@ public static class Case02
         Console.WriteLine($"Address updated. {chosen.Name}'s new address is: {chosen.Address}");
     }
 }
-using System;
+
 
 // Case 3 - Make a Deposit
 public static class Case03
@@ -39,5 +39,20 @@ public static class Case03
 
         chosen.Deposit(amount);
         Console.WriteLine($"{chosen.HolderName}'s updated balance: {chosen.Balance:F3}");
+    }
+}
+
+// Case 4 - Make a Withdrawal
+public static class Case04
+{
+    public static void Run(BankAccount acc1, BankAccount acc2)
+    {
+        Console.WriteLine("--- Case 4: Make a Withdrawal ---");
+        BankAccount chosen = InputHelper.ChooseAccount(acc1, acc2);
+        double amount = InputHelper.ReadDouble("Enter withdrawal amount: ");
+
+        // Withdraw() itself already protects against overdrawing
+        chosen.Withdraw(amount);
+        Console.WriteLine($"Updated balance: {chosen.Balance:F3}");
     }
 }
