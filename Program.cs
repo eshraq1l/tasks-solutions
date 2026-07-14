@@ -201,3 +201,23 @@ public static class Case10
         Console.WriteLine($"{chosen.Name}'s grade was updated to {chosen.Grade}.");
     }
 }
+using System;
+
+// Case 11 - Student Report Card
+public static class Case11
+{
+    public static void Run(Student s1, Student s2)
+    {
+        Console.WriteLine("--- Case 11: Student Report Card ---");
+        Student chosen = InputHelper.ChooseStudent(s1, s2);
+
+        string status = chosen.Grade >= 60 ? "Pass" : "Fail";
+
+        Console.WriteLine("========= Report Card =========");
+        Console.WriteLine("Name:    {chosen.Name}");
+        Console.WriteLine("Address: {chosen.Address}");
+        Console.WriteLine("Grade:   {chosen.Grade}");
+        Console.WriteLine("Status:  {status}");
+        Console.WriteLine("================================");
+    }
+}
