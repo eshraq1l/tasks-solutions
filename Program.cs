@@ -26,3 +26,18 @@ public static class Case02
         Console.WriteLine($"Address updated. {chosen.Name}'s new address is: {chosen.Address}");
     }
 }
+using System;
+
+// Case 3 - Make a Deposit
+public static class Case03
+{
+    public static void Run(BankAccount acc1, BankAccount acc2)
+    {
+        Console.WriteLine("--- Case 3: Make a Deposit ---");
+        BankAccount chosen = InputHelper.ChooseAccount(acc1, acc2);
+        double amount = InputHelper.ReadDouble("Enter deposit amount: ");
+
+        chosen.Deposit(amount);
+        Console.WriteLine($"{chosen.HolderName}'s updated balance: {chosen.Balance:F3}");
+    }
+}
