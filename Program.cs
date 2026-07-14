@@ -244,3 +244,25 @@ public static class Case12
         }
     }
 }
+
+// Case 13 - Bulk Sale With Revenue Calculation
+public static class Case13
+{
+    public static void Run(Product p1, Product p2)
+    {
+        Console.WriteLine("--- Case 13: Bulk Sale With Revenue Calculation ---");
+        Product chosen = InputHelper.ChooseProduct(p1, p2);
+        int qty = InputHelper.ReadInt("Enter quantity to sell: ");
+
+        if (qty > chosen.StockQuantity)
+        {
+            int shortage = qty - chosen.StockQuantity;
+            Console.WriteLine($"Not enough stock. You need {shortage} more unit(s) to fulfill this order. Nothing was sold.");
+            return;
+        }
+
+        chosen.Sell(qty);
+        double revenue = qty * chosen.Price;
+        Console.WriteLine($"Sale completed. Total revenue: {revenue:F3}");
+    }
+}
