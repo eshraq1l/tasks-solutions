@@ -342,3 +342,17 @@ public static class Case16
         return account;
     }
 }
+
+// Case 17 - Total Students Counter [Static Fields & Methods]
+public static class Case17
+{
+    public static void Run()
+    {
+        Console.WriteLine("--- Case 17: Total Students Counter (Static) ---");
+
+        // Called through the class name, not through an object
+        int total = Student.GetTotalStudents();
+
+        Console.WriteLine($"Total Student objects created so far: {total}");
+    }
+}
