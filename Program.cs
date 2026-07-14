@@ -70,3 +70,21 @@ public static class Case05
         Console.WriteLine("Total Inventory Value: {value:F3}");
     }
 }
+
+// Case 6 - Register a Student
+public static class Case06
+{
+    public static void Run(Student s1, Student s2)
+    {
+        Console.WriteLine("--- Case 6: Register a Student ---");
+        Student chosen = InputHelper.ChooseStudent(s1, s2);
+        Console.Write("Enter email: ");
+        string email = Console.ReadLine()!;
+
+        // The private "email" field can ONLY be set through Register()
+        chosen.Register(email);
+
+        // Confirmation message never reveals the email
+        Console.WriteLine("{chosen.Name} has been registered successfully.");
+    }
+}
