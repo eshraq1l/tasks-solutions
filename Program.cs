@@ -1,5 +1,236 @@
 ﻿using System;
 
+public class BankAccount
+{
+    public int AccountNumber { get; private set; }
+    public string HolderName { get; private set; }
+    public double Balance { get; private set; }
+
+    // Read-only computed property (Case 18)
+    public bool IsOverdrawn => Balance < 0;
+
+    // Default constructor
+    public BankAccount()
+    {
+        AccountNumber = 0;
+        HolderName = "Unknown";
+        Balance = 0;
+    }
+
+    // Parameterized constructor (used directly in Case 16 and in Program's static fields)
+    public BankAccount(int accountNumber, string holderName, double balance)
+    {
+        AccountNumber = accountNumber;
+        HolderName = holderName;
+        Balance = balance;
+    }
+
+    public void Deposit(double amount)
+    {
+        if (amount <= 0)
+        {
+            Console.WriteLine("Deposit failed: amount must be greater than zero.");
+            return;
+        }
+
+        Balance += amount;
+    }
+
+    public void Withdraw(double amount)
+    {
+        if (amount <= 0)
+        {
+            Console.WriteLine("Withdrawal failed: amount must be greater than zero.");
+            return;
+        }
+
+        if (amount > Balance)
+        {
+            Console.WriteLine("Withdrawal failed: insufficient balance.");
+            return;
+        }
+
+        Balance -= amount;
+    }
+
+    public void CheckBalance()
+    {
+        Console.WriteLine($"Account Number: {AccountNumber}");
+        Console.WriteLine($"Holder Name:    {HolderName}");
+        Console.WriteLine($"Balance:        {Balance:F3}");
+    }
+}
+
+public class Student
+{
+    // Static counter (Case 17)
+    private static int totalStudents = 0;
+
+    public string Name { get; set; }
+    public string Address { get; set; }
+    public int Grade { get; set; }
+
+    // Private field - can only be set through Register()
+    private string email;
+
+    // Write-only property (Case 19) - no getter, so it cannot be read back
+    private int securityPin;
+    public int SecurityPin
+    {
+        set { securityPin = value; }
+    }
+
+    public Student(string name, string address, int grade)
+    {
+        Name = name;
+        Address = address;
+        Grade = grade;
+        email = string.Empty;
+        securityPin = 0;
+
+        totalStudents++;
+    }
+
+    public void Register(string email)
+    {
+        this.email = email;
+    }
+
+    public static int GetTotalStudents()
+    {
+        return totalStudents;
+    }
+}
+
+public class Product
+{
+    public string Name { get; set; }
+    public double Price { get; set; }
+    public int StockQuantity { get; private set; }
+
+    public Product(string name, double price, int stockQuantity)
+    {
+        Name = name;
+        Price = price;
+        StockQuantity = stockQuantity;
+    }
+
+    public double GetInventoryValue()
+    {
+        return Price * StockQuantity;
+    }
+
+    public void Restock(int quantity)
+    {
+        if (quantity <= 0)
+        {
+            Console.WriteLine("Restock failed: quantity must be greater than zero.");
+            return;
+        }
+
+        StockQuantity += quantity;
+    }
+
+    public void Sell(int quantity)
+    {
+        if (quantity <= 0)
+        {
+            Console.WriteLine("Sale failed: quantity must be greater than zero.");
+            return;
+        }
+
+        if (quantity > StockQuantity)
+        {
+            Console.WriteLine("Sale failed: not enough stock.");
+            return;
+        }
+
+        StockQuantity -= quantity;
+    }
+}
+
+public static class InputHelper
+{
+    public static BankAccount ChooseAccount(BankAccount acc1, BankAccount acc2)
+    {
+        while (true)
+        {
+            Console.WriteLine($"1. {acc1.HolderName} (Account #{acc1.AccountNumber})");
+            Console.WriteLine($"2. {acc2.HolderName} (Account #{acc2.AccountNumber})");
+            Console.Write("Choose an account (1 or 2): ");
+            string input = Console.ReadLine()!;
+
+            if (input == "1") return acc1;
+            if (input == "2") return acc2;
+
+            Console.WriteLine("Invalid choice. Please enter 1 or 2.");
+        }
+    }
+
+    public static Student ChooseStudent(Student s1, Student s2)
+    {
+        while (true)
+        {
+            Console.WriteLine($"1. {s1.Name}");
+            Console.WriteLine($"2. {s2.Name}");
+            Console.Write("Choose a student (1 or 2): ");
+            string input = Console.ReadLine()!;
+
+            if (input == "1") return s1;
+            if (input == "2") return s2;
+
+            Console.WriteLine("Invalid choice. Please enter 1 or 2.");
+        }
+    }
+
+    public static Product ChooseProduct(Product p1, Product p2)
+    {
+        while (true)
+        {
+            Console.WriteLine($"1. {p1.Name}");
+            Console.WriteLine($"2. {p2.Name}");
+            Console.Write("Choose a product (1 or 2): ");
+            string input = Console.ReadLine()!;
+
+            if (input == "1") return p1;
+            if (input == "2") return p2;
+
+            Console.WriteLine("Invalid choice. Please enter 1 or 2.");
+        }
+    }
+
+    public static double ReadDouble(string prompt)
+    {
+        while (true)
+        {
+            Console.Write(prompt);
+            string input = Console.ReadLine()!;
+
+            if (double.TryParse(input, out double value))
+            {
+                return value;
+            }
+
+            Console.WriteLine("Invalid input. Please enter a valid number.");
+        }
+    }
+
+    public static int ReadInt(string prompt)
+    {
+        while (true)
+        {
+            Console.Write(prompt);
+            string input = Console.ReadLine()!;
+
+            if (int.TryParse(input, out int value))
+            {
+                return value;
+            }
+
+            Console.WriteLine("Invalid input. Please enter a valid whole number.");
+        }
+    }
+}
 // Case 1 - View Account Details
 public static class Case01
 {
@@ -23,7 +254,7 @@ public static class Case02
         string newAddress = Console.ReadLine()!;
 
         chosen.Address = newAddress;
-        Console.WriteLine("Address updated. {chosen.Name}'s new address is: {chosen.Address}");
+        Console.WriteLine($"Address updated. {chosen.Name}'s new address is: {chosen.Address}");
     }
 }
 
@@ -38,7 +269,7 @@ public static class Case03
         double amount = InputHelper.ReadDouble("Enter deposit amount: ");
 
         chosen.Deposit(amount);
-        Console.WriteLine("{chosen.HolderName}'s updated balance: {chosen.Balance:F3}");
+        Console.WriteLine($"{chosen.HolderName}'s updated balance: {chosen.Balance:F3}");
     }
 }
 
@@ -53,7 +284,7 @@ public static class Case04
 
         // Withdraw() itself already protects against overdrawing
         chosen.Withdraw(amount);
-        Console.WriteLine("Updated balance: {chosen.Balance:F3}");
+        Console.WriteLine($"Updated balance: {chosen.Balance:F3}");
     }
 }
 
@@ -67,7 +298,7 @@ public static class Case05
         Product chosen = InputHelper.ChooseProduct(p1, p2);
         double value = chosen.GetInventoryValue();
 
-        Console.WriteLine("Total Inventory Value: {value:F3}");
+        Console.WriteLine($"Total Inventory Value: {value:F3}");
     }
 }
 
@@ -85,7 +316,7 @@ public static class Case06
         chosen.Register(email);
 
         // Confirmation message never reveals the email
-        Console.WriteLine("{chosen.Name} has been registered successfully.");
+        Console.WriteLine($"{chosen.Name} has been registered successfully.");
     }
 }
 
@@ -99,11 +330,11 @@ public static class Case07
 
         if (acc1.Balance > acc2.Balance)
         {
-            Console.WriteLine("{acc1.HolderName} holds more money ({acc1.Balance:F3} vs {acc2.Balance:F3}).");
+            Console.WriteLine($"{acc1.HolderName} holds more money ({acc1.Balance:F3} vs {acc2.Balance:F3}).");
         }
         else if (acc2.Balance > acc1.Balance)
         {
-            Console.WriteLine("{acc2.HolderName} holds more money ({acc2.Balance:F3} vs {acc1.Balance:F3}).");
+            Console.WriteLine($"{acc2.HolderName} holds more money ({acc2.Balance:F3} vs {acc1.Balance:F3}).");
         }
         else
         {
@@ -125,15 +356,15 @@ public static class Case08
 
         if (chosen.StockQuantity < 10)
         {
-            Console.WriteLine("Stock level: Low ({chosen.StockQuantity} units).");
+            Console.WriteLine($"Stock level: Low ({chosen.StockQuantity} units).");
         }
         else if (chosen.StockQuantity <= 49)
         {
-            Console.WriteLine("Stock level: Moderate ({chosen.StockQuantity} units).");
+            Console.WriteLine($"Stock level: Moderate ({chosen.StockQuantity} units).");
         }
         else
         {
-            Console.WriteLine("Stock level: Well Stocked ({chosen.StockQuantity} units).");
+            Console.WriteLine($"Stock level: Well Stocked ({chosen.StockQuantity} units).");
         }
     }
 }
@@ -164,7 +395,7 @@ public static class Case09
         {
             source.Withdraw(amount);
             destination.Deposit(amount);
-            Console.WriteLine("Transfer successful. {source.HolderName}'s new balance: {source.Balance:F3} | {destination.HolderName}'s new balance: {destination.Balance:F3}");
+            Console.WriteLine($"Transfer successful. {source.HolderName}'s new balance: {source.Balance:F3} | {destination.HolderName}'s new balance: {destination.Balance:F3}");
         }
         else
         {
@@ -201,7 +432,6 @@ public static class Case10
         Console.WriteLine($"{chosen.Name}'s grade was updated to {chosen.Grade}.");
     }
 }
-using System;
 
 // Case 11 - Student Report Card
 public static class Case11
@@ -214,10 +444,10 @@ public static class Case11
         string status = chosen.Grade >= 60 ? "Pass" : "Fail";
 
         Console.WriteLine("========= Report Card =========");
-        Console.WriteLine("Name:    {chosen.Name}");
-        Console.WriteLine("Address: {chosen.Address}");
-        Console.WriteLine("Grade:   {chosen.Grade}");
-        Console.WriteLine("Status:  {status}");
+        Console.WriteLine($"Name:    {chosen.Name}");
+        Console.WriteLine($"Address: {chosen.Address}");
+        Console.WriteLine($"Grade:   {chosen.Grade}");
+        Console.WriteLine($"Status:  {status}");
         Console.WriteLine("================================");
     }
 }
@@ -311,7 +541,7 @@ public static class Case15
         {
             double topUp = 100 - before;
             chosen.Deposit(topUp);
-            Console.WriteLine("Balance before: {before:F3} | Topped up by: {topUp:F3} | Balance after: {chosen.Balance:F3}");
+            Console.WriteLine($"Balance before: {before:F3} | Topped up by: {topUp:F3} | Balance after: {chosen.Balance:F3}");
         }
         else
         {
@@ -367,11 +597,11 @@ public static class Case18
 
         if (chosen.IsOverdrawn)
         {
-            Console.WriteLine("{chosen.HolderName}'s account is currently OVERDRAWN.");
+            Console.WriteLine($"{chosen.HolderName}'s account is currently OVERDRAWN.");
         }
         else
         {
-            Console.WriteLine("{chosen.HolderName}'s account is not overdrawn.");
+            Console.WriteLine($"{chosen.HolderName}'s account is not overdrawn.");
         }
     }
 }
@@ -399,6 +629,93 @@ public static class Case19
         // The property cannot be read back - only written to
         chosen.SecurityPin = pin;
 
-        Console.WriteLine("PIN set successfully for {chosen.Name}.");
+        Console.WriteLine($"PIN set successfully for {chosen.Name}.");
+    }
+}
+
+
+public class Program
+{
+    // ---- The six required objects (individual, NOT in a collection) ----
+    static BankAccount acc1 = new BankAccount(1163, "karim", 120);
+    static BankAccount acc2 = new BankAccount(15203, "Ali", 63);
+
+    static Student stu1 = new Student("Ali", "Muscat", 65);
+    static Student stu2 = new Student("Ahmed", "Muscat", 70);
+
+    static Product prod1 = new Product("Wireless Mouse", 5.500, 50);
+    static Product prod2 = new Product("Mechanical Keyboard", 15.750, 20);
+
+    // Holds the extra account created in Case 16, once the user creates one
+    static BankAccount newAccount = null;
+
+    public static void Main(string[] args)
+    {
+        bool running = true;
+
+        while (running)
+        {
+            PrintMenu();
+            string choice = Console.ReadLine()!;
+            Console.WriteLine();
+
+            switch (choice)
+            {
+                case "1": Case01.Run(acc1, acc2); break;
+                case "2": Case02.Run(stu1, stu2); break;
+                case "3": Case03.Run(acc1, acc2); break;
+                case "4": Case04.Run(acc1, acc2); break;
+                case "5": Case05.Run(prod1, prod2); break;
+                case "6": Case06.Run(stu1, stu2); break;
+                case "7": Case07.Run(acc1, acc2); break;
+                case "8": Case08.Run(prod1, prod2); break;
+                case "9": Case09.Run(acc1, acc2); break;
+                case "10": Case10.Run(stu1, stu2); break;
+                case "11": Case11.Run(stu1, stu2); break;
+                case "12": Case12.Run(acc1, acc2); break;
+                case "13": Case13.Run(prod1, prod2); break;
+                case "14": Case14.Run(stu1, stu2, acc1, acc2); break;
+                case "15": Case15.Run(acc1, acc2); break;
+                case "16": newAccount = Case16.Run(); break;
+                case "17": Case17.Run(); break;
+                case "18": Case18.Run(acc1, acc2); break;
+                case "19": Case19.Run(stu1, stu2); break;
+                case "20":
+                    running = false;
+                    Console.WriteLine("Goodbye!");
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Please pick a number from 1 to 20.");
+                    break;
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+    static void PrintMenu()
+    {
+        Console.WriteLine("========== Bank & Student Management ==========");
+        Console.WriteLine("1.  View Account Details");
+        Console.WriteLine("2.  Update Student Address");
+        Console.WriteLine("3.  Make a Deposit");
+        Console.WriteLine("4.  Make a Withdrawal");
+        Console.WriteLine("5.  View Product Details");
+        Console.WriteLine("6.  Register a Student");
+        Console.WriteLine("7.  Compare Two Account Balances");
+        Console.WriteLine("8.  Restock Product & Stock Level Check");
+        Console.WriteLine("9.  Transfer Between Accounts");
+        Console.WriteLine("10. Update Student Grade (Validated)");
+        Console.WriteLine("11. Student Report Card");
+        Console.WriteLine("12. Account Health Status");
+        Console.WriteLine("13. Bulk Sale With Revenue Calculation");
+        Console.WriteLine("14. Scholarship Eligibility Check");
+        Console.WriteLine("15. Full Balance Top-Up Flow");
+        Console.WriteLine("16. Quick Account Opening (Parameterized Constructor)");
+        Console.WriteLine("17. Total Students Counter (Static)");
+        Console.WriteLine("18. Overdrawn Account Check (Read-Only Property)");
+        Console.WriteLine("19. Set Student Security PIN (Write-Only Property)");
+        Console.WriteLine("20. Exit");
+        Console.Write("Enter your choice: ");
     }
 }
