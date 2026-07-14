@@ -111,3 +111,29 @@ public static class Case07
         }
     }
 }
+
+// Case 8 - Restock Product & Stock Level Check
+public static class Case08
+{
+    public static void Run(Product p1, Product p2)
+    {
+        Console.WriteLine("--- Case 8: Restock Product & Stock Level Check ---");
+        Product chosen = InputHelper.ChooseProduct(p1, p2);
+        int qty = InputHelper.ReadInt("Enter quantity to restock: ");
+
+        chosen.Restock(qty);
+
+        if (chosen.StockQuantity < 10)
+        {
+            Console.WriteLine("Stock level: Low ({chosen.StockQuantity} units).");
+        }
+        else if (chosen.StockQuantity <= 49)
+        {
+            Console.WriteLine("Stock level: Moderate ({chosen.StockQuantity} units).");
+        }
+        else
+        {
+            Console.WriteLine("Stock level: Well Stocked ({chosen.StockQuantity} units).");
+        }
+    }
+}
