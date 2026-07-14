@@ -137,3 +137,38 @@ public static class Case08
         }
     }
 }
+
+// Case 9 - Transfer Between Accounts
+public static class Case09
+{
+    public static void Run(BankAccount acc1, BankAccount acc2)
+    {
+        Console.WriteLine("--- Case 9: Transfer Between Accounts ---");
+
+        Console.WriteLine("Select the SOURCE account:");
+        BankAccount source = InputHelper.ChooseAccount(acc1, acc2);
+
+        Console.WriteLine("Select the DESTINATION account:");
+        BankAccount destination = InputHelper.ChooseAccount(acc1, acc2);
+
+        if (source == destination)
+        {
+            Console.WriteLine("Transfer failed: source and destination cannot be the same account.");
+            return;
+        }
+
+        double amount = InputHelper.ReadDouble("Enter amount to transfer: ");
+
+        // Check BEFORE changing anything
+        if (source.Balance >= amount)
+        {
+            source.Withdraw(amount);
+            destination.Deposit(amount);
+            Console.WriteLine("Transfer successful. {source.HolderName}'s new balance: {source.Balance:F3} | {destination.HolderName}'s new balance: {destination.Balance:F3}");
+        }
+        else
+        {
+            Console.WriteLine("Transfer failed: source account has insufficient balance. No accounts were changed.");
+        }
+    }
+}
