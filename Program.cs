@@ -23,7 +23,7 @@ public static class Case02
         string newAddress = Console.ReadLine()!;
 
         chosen.Address = newAddress;
-        Console.WriteLine($"Address updated. {chosen.Name}'s new address is: {chosen.Address}");
+        Console.WriteLine("Address updated. {chosen.Name}'s new address is: {chosen.Address}");
     }
 }
 
@@ -38,7 +38,7 @@ public static class Case03
         double amount = InputHelper.ReadDouble("Enter deposit amount: ");
 
         chosen.Deposit(amount);
-        Console.WriteLine($"{chosen.HolderName}'s updated balance: {chosen.Balance:F3}");
+        Console.WriteLine("{chosen.HolderName}'s updated balance: {chosen.Balance:F3}");
     }
 }
 
@@ -86,5 +86,28 @@ public static class Case06
 
         // Confirmation message never reveals the email
         Console.WriteLine("{chosen.Name} has been registered successfully.");
+    }
+}
+
+
+// Case 7 - Compare Two Account Balances
+public static class Case07
+{
+    public static void Run(BankAccount acc1, BankAccount acc2)
+    {
+        Console.WriteLine("--- Case 7: Compare Two Account Balances ---");
+
+        if (acc1.Balance > acc2.Balance)
+        {
+            Console.WriteLine("{acc1.HolderName} holds more money ({acc1.Balance:F3} vs {acc2.Balance:F3}).");
+        }
+        else if (acc2.Balance > acc1.Balance)
+        {
+            Console.WriteLine("{acc2.HolderName} holds more money ({acc2.Balance:F3} vs {acc1.Balance:F3}).");
+        }
+        else
+        {
+            Console.WriteLine("Both accounts have equal balances.");
+        }
     }
 }
