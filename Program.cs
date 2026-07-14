@@ -221,3 +221,26 @@ public static class Case11
         Console.WriteLine("================================");
     }
 }
+
+// Case 12 - Account Health Status
+public static class Case12
+{
+    public static void Run(BankAccount acc1, BankAccount acc2)
+    {
+        Console.WriteLine("--- Case 12: Account Health Status ---");
+        BankAccount chosen = InputHelper.ChooseAccount(acc1, acc2);
+
+        if (chosen.Balance < 50)
+        {
+            Console.WriteLine("Status: Low Balance");
+        }
+        else if (chosen.Balance <= 1000)
+        {
+            Console.WriteLine("Status: Healthy");
+        }
+        else
+        {
+            Console.WriteLine("Status: Premium");
+        }
+    }
+}
