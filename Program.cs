@@ -554,5 +554,51 @@
         }
     }
 }
+{
+    public static partial class Program
+{
+    // Case 13 | Extend Guest Stay | 20 pts
+    private static void Case13_ExtendGuestStay()
+    {
+        Console.WriteLine("\n--- Extend Guest Stay ---");
+
+        string guestId = ReadNonEmptyString("Enter guest ID: ");
+
+        // FirstOrDefault() lookup - no manual loop.
+        Guest guest = guests.FirstOrDefault(g => g.GuestId.Equals(guestId, StringComparison.OrdinalIgnoreCase));
+
+        if (guest == null)
+        {
+            Console.WriteLine($"Error: No guest found with ID '{guestId}'.");
+            return;
+        }
+
+        if (guest.RoomNumber == "Not Assigned")
+        {
+            Console.WriteLine("This guest has no active booking to extend.");
+            return;
+        }
+
+        Console.Write("Enter number of additional nights: ");
+        string input = Console.ReadLine();
+
+        if (!int.TryParse(input, out int additionalNights) || additionalNights <= 0)
+        {
+            Console.WriteLine("Error: Invalid number of nights. No changes made.");
+            return;
+        }
+
+        guest.TotalNights += additionalNights; // updated in place
+
+        Room room = rooms.FirstOrDefault(r => r.RoomNumber.ToString() == guest.RoomNumber);
+        double price = room != null ? room.PricePerNight : 0;
+        double newTotalCost = guest.CalculateTotalCost(price);
+
+        Console.WriteLine("\nStay extended successfully!");
+        Console.WriteLine($"  Guest Name     : {guest.GuestName}");
+        Console.WriteLine($"  Updated Nights : {guest.TotalNights}");
+        Console.WriteLine($"  New Total Cost : OMR {newTotalCost:F2}");
+    }
+}
 
 
