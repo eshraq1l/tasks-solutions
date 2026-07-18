@@ -139,6 +139,31 @@
         }
     }
 }
+{
+    public static partial class Program
+{
+    // Case 05 | View All Guests | 10 pts
+    private static void Case05_ViewAllGuests()
+    {
+        Console.WriteLine("\n--- View All Guests ---");
+
+        if (!guests.Any())
+        {
+            Console.WriteLine("No guests have been registered yet.");
+            return;
+        }
+
+        Console.WriteLine($"Total guests: {guests.Count()}\n");
+
+        // Sorted alphabetically by guest name using OrderBy() - no manual sort.
+        var sortedGuests = guests.OrderBy(g => g.GuestName);
+
+        foreach (Guest guest in sortedGuests)
+        {
+            guest.DisplayGuest();
+        }
+    }
+}
 
 
 
