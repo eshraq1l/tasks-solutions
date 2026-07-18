@@ -165,6 +165,108 @@
     }
 }
 
+{
+    public static partial class Program
+{
+    // Case 06 | Search & Filter Rooms | 15 pts
+    private static void Case06_SearchAndFilterRooms()
+    {
+        bool back = false;
+
+        while (!back)
+        {
+            Console.WriteLine("\n--- Search & Filter Rooms ---");
+            Console.WriteLine("1. Show all available rooms");
+            Console.WriteLine("2. Filter by room type");
+            Console.WriteLine("3. Filter by max price");
+            Console.WriteLine("4. Room price statistics");
+            Console.WriteLine("0. Back");
+            Console.Write("Enter your choice: ");
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    {
+                        var available = rooms.Where(r => r.IsAvailable)
+                                              .OrderBy(r => r.PricePerNight)
+                                              .ToList();
+
+                        Console.WriteLine($"\nAvailable rooms found: {available.Count}");
+
+                        if (!available.Any())
+                            Console.WriteLine("No rooms found for the selected criteria.");
+                        else
+                            foreach (var r in available) r.DisplayRoom();
+
+                        break;
+                    }
+                case "2":
+                    {
+                        string type = ReadNonEmptyString("Enter room type to filter by: ");
+
+                        var filtered = rooms.Where(r => r.RoomType.Equals(type, StringComparison.OrdinalIgnoreCase))
+                                             .ToList();
+
+                        Console.WriteLine($"\nRooms of type '{type}' found: {filtered.Count}");
+
+                        if (!filtered.Any())
+                            Console.WriteLine("No rooms found for the selected criteria.");
+                        else
+                            foreach (var r in filtered) r.DisplayRoom();
+
+                        break;
+                    }
+                case "3":
+                    {
+                        double maxPrice = ReadPositiveDouble("Enter maximum price: ");
+
+                        var filtered = rooms.Where(r => r.IsAvailable && r.PricePerNight <= maxPrice)
+                                             .OrderBy(r => r.PricePerNight)
+                                             .ToList();
+
+                        Console.WriteLine($"\nAvailable rooms at or below OMR {maxPrice:F2}: {filtered.Count}");
+
+                        if (!filtered.Any())
+                            Console.WriteLine("No rooms found for the selected criteria.");
+                        else
+                            foreach (var r in filtered) r.DisplayRoom();
+
+                        break;
+                    }
+                case "4":
+                    {
+                        if (!rooms.Any())
+                        {
+                            Console.WriteLine("No rooms found for the selected criteria.");
+                            break;
+                        }
+
+                        int totalRooms = rooms.Count();
+                        int availableRooms = rooms.Count(r => r.IsAvailable);
+                        double avgPrice = rooms.Average(r => r.PricePerNight);
+                        double minPrice = rooms.Min(r => r.PricePerNight);
+                        double maxPriceValue = rooms.Max(r => r.PricePerNight);
+
+                        Console.WriteLine("\nRoom Price Statistics");
+                        Console.WriteLine($"  Total Rooms     : {totalRooms}");
+                        Console.WriteLine($"  Available Rooms : {availableRooms}");
+                        Console.WriteLine($"  Average Price   : OMR {avgPrice:F2}");
+                        Console.WriteLine($"  Cheapest Price  : OMR {minPrice:F2}");
+                        Console.WriteLine($"  Most Expensive  : OMR {maxPriceValue:F2}");
+
+                        break;
+                    }
+                case "0":
+                    back = true;
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    break;
+            }
+        }
+    }
+}
 
 
 
