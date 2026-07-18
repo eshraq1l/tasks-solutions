@@ -367,3 +367,30 @@
         Console.WriteLine($"  New Price   : OMR {room.PricePerNight:F2}");
     }
 }
+{
+    public static partial class Program
+{
+    // Case 09 | Guest Lookup by Name | 15 pts
+    private static void Case09_GuestLookupByName()
+    {
+        Console.WriteLine("\n--- Guest Lookup by Name ---");
+
+        string search = ReadNonEmptyString("Enter name or partial name to search: ");
+
+        // Case-insensitive Where() search - no manual loop.
+        var matches = guests.Where(g => g.GuestName.ToLower().Contains(search.ToLower())).ToList();
+
+        Console.WriteLine($"\nMatches found: {matches.Count()}");
+
+        if (!matches.Any())
+        {
+            Console.WriteLine("No guests matched that search.");
+            return;
+        }
+
+        foreach (var g in matches)
+        {
+            Console.WriteLine($"  ID: {g.GuestId} | Name: {g.GuestName} | Room: {g.RoomNumber}");
+        }
+    }
+}
