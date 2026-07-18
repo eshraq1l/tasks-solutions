@@ -66,7 +66,57 @@
         Console.WriteLine($"  Room Number   : {newGuest.RoomNumber}");
     }
 }
+
+ // Case 03 | Book a Room for a Guest | 10 pts
+        private static void Case03_BookRoomForGuest()
+{
+    Console.WriteLine("\n--- Book a Room for a Guest ---");
+
+    string guestId = ReadNonEmptyString("Enter guest ID: ");
+
+    // FirstOrDefault() lookup - no manual loop.
+    Guest guest = guests.FirstOrDefault(g => g.GuestId.Equals(guestId, StringComparison.OrdinalIgnoreCase));
+
+    if (guest == null)
+    {
+        Console.WriteLine($"Error: No guest found with ID '{guestId}'.");
+        return;
+    }
+
+    int roomNumber = ReadPositiveInt("Enter room number to book: ");
+
+    // FirstOrDefault() lookup - no manual loop.
+    Room room = rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+
+    if (room == null)
+    {
+        Console.WriteLine($"Error: No room found with number {roomNumber}.");
+        return;
+    }
+
+    if (!room.IsAvailable)
+    {
+        Console.WriteLine("Room is already booked.");
+        return;
+    }
+
+    // Update both objects in place - the lists reflect the change automatically.
+    guest.RoomNumber = room.RoomNumber.ToString();
+    room.IsAvailable = false;
+
+    double totalCost = guest.CalculateTotalCost(room.PricePerNight);
+
+    Console.WriteLine("\nBooking confirmed!");
+    Console.WriteLine($"  Guest Name   : {guest.GuestName}");
+    Console.WriteLine($"  Room Number  : {room.RoomNumber}");
+    Console.WriteLine($"  Room Type    : {room.RoomType}");
+    Console.WriteLine($"  Price/Night  : OMR {room.PricePerNight:F2}");
+    Console.WriteLine($"  Total Nights : {guest.TotalNights}");
+    Console.WriteLine($"  Total Cost   : OMR {totalCost:F2}");
 }
+    }
+}
+
 
 
 
