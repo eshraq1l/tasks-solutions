@@ -330,3 +330,40 @@
 
 
 
+{
+    public static partial class Program
+{
+    // Case 08 | Update Room Price | 15 pts
+    private static void Case08_UpdateRoomPrice()
+    {
+        Console.WriteLine("\n--- Update Room Price ---");
+
+        int roomNumber = ReadPositiveInt("Enter room number: ");
+
+        // FirstOrDefault() lookup - no manual loop.
+        Room room = rooms.FirstOrDefault(r => r.RoomNumber == roomNumber);
+
+        if (room == null)
+        {
+            Console.WriteLine($"Error: No room found with number {roomNumber}.");
+            return;
+        }
+
+        Console.Write("Enter new price per night: ");
+        string input = Console.ReadLine();
+
+        if (!double.TryParse(input, out double newPrice) || newPrice <= 0)
+        {
+            Console.WriteLine("Error: Invalid price. No changes made.");
+            return;
+        }
+
+        double oldPrice = room.PricePerNight;
+        room.PricePerNight = newPrice; // updated in place
+
+        Console.WriteLine("\nPrice updated successfully!");
+        Console.WriteLine($"  Room Number : {room.RoomNumber}");
+        Console.WriteLine($"  Old Price   : OMR {oldPrice:F2}");
+        Console.WriteLine($"  New Price   : OMR {room.PricePerNight:F2}");
+    }
+}
