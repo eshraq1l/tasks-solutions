@@ -640,5 +640,39 @@
         Console.WriteLine($"  Total Cost  : OMR {topEarner.TotalCost:F2}");
     }
 }
-}
+{
+    public static partial class Program
+{
+    // Case 15 | Guest Pagination Viewer | 20 pts
+    private static void Case15_GuestPaginationViewer()
+    {
+        Console.WriteLine("\n--- Guest Pagination Viewer ---");
 
+        const int pageSize = 3;
+
+        if (!guests.Any())
+        {
+            Console.WriteLine("No guests have been registered yet.");
+            return;
+        }
+
+        int totalPages = (int)Math.Ceiling(guests.Count / (double)pageSize);
+
+        int pageNumber = ReadPositiveInt($"Enter page number (1-{totalPages}): ");
+
+        if (pageNumber > totalPages)
+        {
+            Console.WriteLine("That page does not exist.");
+            return;
+        }
+
+        // Skip() and Take() together - no manual index-range loop.
+        var pageGuests = guests.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+        Console.WriteLine($"\nPage {pageNumber} of {totalPages}");
+        foreach (var g in pageGuests)
+        {
+            g.DisplayGuest();
+        }
+    }
+}
