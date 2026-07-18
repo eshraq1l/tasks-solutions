@@ -708,5 +708,166 @@ public class Guest
         return pricePerNight * TotalNights;
     }
 }
+namespace HotelManagementSystem
+{
+    // This class is split across many files (partial class) - one file per case,
+    // as requested. This file only holds Main(), the menu loop, the shared
+    // data lists, and small shared input-validation helpers.
+    public static partial class Program
+    {
+        public static List<Room> rooms = new List<Room>();
+        public static List<Guest> guests = new List<Guest>();
+
+        public static void Main(string[] args)
+        {
+            PreloadRooms();
+            RunMenu();
+        }
+
+        private static void PreloadRooms()
+        {
+            rooms.Add(new Room(101, "Single", 35.00));
+            rooms.Add(new Room(102, "Single", 38.00));
+            rooms.Add(new Room(201, "Double", 55.00));
+            rooms.Add(new Room(202, "Double", 60.00));
+            rooms.Add(new Room(301, "Suite", 120.00));
+            rooms.Add(new Room(302, "Suite", 140.00));
+        }
+
+        private static void RunMenu()
+        {
+            bool running = true;
+
+            while (running)
+            {
+                PrintMenu();
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1": Case01_AddNewRoom(); break;
+                    case "2": Case02_RegisterNewGuest(); break;
+                    case "3": Case03_BookRoomForGuest(); break;
+                    case "4": Case04_ViewAllRooms(); break;
+                    case "5": Case05_ViewAllGuests(); break;
+                    case "6": Case06_SearchAndFilterRooms(); break;
+                    case "7": Case07_GuestAndBookingStatistics(); break;
+                    case "8": Case08_UpdateRoomPrice(); break;
+                    case "9": Case09_GuestLookupByName(); break;
+                    case "10": Case10_RoomTypeBreakdownReport(); break;
+                    case "11": Case11_CheckOutGuest(); break;
+                    case "12": Case12_RemoveUnavailableRooms(); break;
+                    case "13": Case13_ExtendGuestStay(); break;
+                    case "14": Case14_HighestRevenueBooking(); break;
+                    case "15": Case15_GuestPaginationViewer(); break;
+                    case "0":
+                        running = false;
+                        Console.WriteLine("\nThank you for using Grand Vista Hotel Management System. Goodbye!");
+                        break;
+                    default:
+                        Console.WriteLine("\nInvalid choice. Please try again.");
+                        break;
+                }
+
+                if (running)
+                {
+                    Console.WriteLine("\nPress ENTER to return to the main menu...");
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        private static void PrintMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("================================================");
+            Console.WriteLine("GRAND VISTA HOTEL — MANAGEMENT SYSTEM");
+            Console.WriteLine("================================================");
+            Console.WriteLine(" 1. Add New Room");
+            Console.WriteLine(" 2. Register New Guest");
+            Console.WriteLine(" 3. Book a Room for a Guest");
+            Console.WriteLine(" 4. View All Rooms");
+            Console.WriteLine(" 5. View All Guests");
+            Console.WriteLine(" 6. Search & Filter Rooms");
+            Console.WriteLine(" 7. Guest & Booking Statistics");
+            Console.WriteLine(" 8. Update Room Price");
+            Console.WriteLine(" 9. Guest Lookup by Name");
+            Console.WriteLine("10. Room Type Breakdown Report");
+            Console.WriteLine("11. Check Out a Guest");
+            Console.WriteLine("12. Remove Unavailable Rooms");
+            Console.WriteLine("13. Extend Guest Stay");
+            Console.WriteLine("14. Highest Revenue Booking");
+            Console.WriteLine("15. Guest Pagination Viewer");
+            Console.WriteLine(" 0. Exit");
+            Console.WriteLine("================================================");
+            Console.Write("Enter your choice: ");
+        }
+
+        // ---------- Shared input helpers (used by several case files) ----------
+
+        public static int ReadPositiveInt(string prompt)
+        {
+            int value;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out value) && value > 0)
+                    return value;
+                Console.WriteLine("Invalid input. Please enter a positive whole number.");
+            }
+        }
+
+        public static double ReadPositiveDouble(string prompt)
+        {
+            double value;
+            while (true)
+            {
+                Console.Write(prompt);
+                string input = Console.ReadLine();
+                if (double.TryParse(input, out value) && value > 0)
+                    return value;
+                Console.WriteLine("Invalid input. Please enter a positive number.");
+            }
+        }
+
+        public static string ReadNonEmptyString(string prompt)
+        {
+            string value;
+            while (true)
+            {
+                Console.Write(prompt);
+                value = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(value))
+                    return value.Trim();
+                Console.WriteLine("Input cannot be empty.");
+            }
+        }
+    }
 }
+// Represents a single room in the hotel.
+public class Room
+{
+    public int RoomNumber { get; set; }
+    public string RoomType { get; set; }
+    public double PricePerNight { get; set; }
+    public bool IsAvailable { get; set; }
+
+    public Room(int roomNumber, string roomType, double pricePerNight, bool isAvailable = true)
+    {
+        RoomNumber = roomNumber;
+        RoomType = roomType;
+        PricePerNight = pricePerNight;
+        IsAvailable = isAvailable;
+    }
+
+    public void DisplayRoom()
+    {
+        string status = IsAvailable ? "Available" : "Booked";
+        Console.WriteLine(
+            $"Room {RoomNumber,-6} | Type: {RoomType,-7} | Price/Night: OMR {PricePerNight,8:F2} | Status: {status}");
+    }
+}
+}
+
 
