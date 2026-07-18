@@ -267,6 +267,66 @@
         }
     }
 }
+{
+    public static partial class Program
+{
+    // Case 07 | Guest & Booking Statistics | 15 pts
+    private static void Case07_GuestAndBookingStatistics()
+    {
+        Console.WriteLine("\n--- Guest & Booking Statistics ---");
+
+        int totalGuests = guests.Count();
+        int guestsWithRoom = guests.Count(g => g.RoomNumber != "Not Assigned");
+        int totalRooms = rooms.Count();
+        int bookedRooms = rooms.Count(r => !r.IsAvailable);
+
+        Console.WriteLine($"Total Registered Guests : {totalGuests}");
+        Console.WriteLine($"Guests With a Room      : {guestsWithRoom}");
+        Console.WriteLine($"Total Rooms             : {totalRooms}");
+        Console.WriteLine($"Booked Rooms            : {bookedRooms}");
+
+        var activeGuests = guests.Where(g => g.RoomNumber != "Not Assigned").ToList();
+
+        if (!activeGuests.Any())
+        {
+            Console.WriteLine("\nNo active bookings recorded.");
+            return;
+        }
+
+        double avgNights = guests.Where(g => g.RoomNumber != "Not Assigned").Average(g => g.TotalNights);
+        Console.WriteLine($"\nAverage Nights (Active Bookings): {avgNights:F2}");
+
+        // Top 3 highest-spending guests - OrderByDescending on calculateTotalCost(), then Take(3).
+        var topGuests = activeGuests
+            .OrderByDescending(g => GetGuestTotalCost(g))
+            .Take(3)
+            .ToList();
+
+        Console.WriteLine("\nTop 3 Highest-Spending Guests:");
+        foreach (var g in topGuests)
+        {
+            Console.WriteLine($"  {g.GuestName} — Room {g.RoomNumber} — OMR {GetGuestTotalCost(g):F2}");
+        }
+
+        // Select() to produce a summary line per booked guest.
+        var summaryLines = activeGuests.Select(g =>
+            $"{g.GuestName} — Room {g.RoomNumber} — {g.TotalNights} nights — OMR {GetGuestTotalCost(g):F2}");
+
+        Console.WriteLine("\nBooking Summary:");
+        foreach (var line in summaryLines)
+        {
+            Console.WriteLine($"  {line}");
+        }
+    }
+
+    // Helper that always routes through calculateTotalCost() using the guest's linked room price.
+    private static double GetGuestTotalCost(Guest g)
+    {
+        Room room = rooms.FirstOrDefault(r => r.RoomNumber.ToString() == g.RoomNumber);
+        double price = room != null ? room.PricePerNight : 0;
+        return g.CalculateTotalCost(price);
+    }
+}
 
 
 
