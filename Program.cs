@@ -394,3 +394,43 @@
         }
     }
 }
+{
+    public static partial class Program
+{
+    // Case 10 | Room Type Breakdown Report | 15 pts
+    private static void Case10_RoomTypeBreakdownReport()
+    {
+        Console.WriteLine("\n--- Room Type Breakdown Report ---");
+
+        string[] types = { "Single", "Double", "Suite" };
+
+        foreach (string type in types)
+        {
+            int count = rooms.Count(r => r.RoomType.Equals(type, StringComparison.OrdinalIgnoreCase));
+
+            string avgDisplay;
+            if (count > 0)
+            {
+                double avg = rooms.Where(r => r.RoomType.Equals(type, StringComparison.OrdinalIgnoreCase))
+                                   .Average(r => r.PricePerNight);
+                avgDisplay = $"OMR {avg:F2}";
+            }
+            else
+            {
+                avgDisplay = "N/A";
+            }
+
+            Console.WriteLine($"  {type,-7} — Count: {count,2} | Average Price: {avgDisplay}");
+        }
+
+        if (rooms.Any())
+        {
+            double overallAvg = rooms.Average(r => r.PricePerNight);
+            Console.WriteLine($"\nOverall Average Price (All Rooms): OMR {overallAvg:F2}");
+        }
+        else
+        {
+            Console.WriteLine("\nNo rooms available to calculate an overall average.");
+        }
+    }
+}
