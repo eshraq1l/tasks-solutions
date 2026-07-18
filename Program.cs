@@ -43,6 +43,30 @@
             }
         }
     }
+    // Case 02 | Register New Guest | 10 pts
+    private static void Case02_RegisterNewGuest()
+    {
+        Console.WriteLine("\n--- Register New Guest ---");
+
+        string name = ReadNonEmptyString("Enter guest name: ");
+        string checkInDate = ReadNonEmptyString("Enter check-in date (e.g. 2026-07-18): ");
+        int totalNights = ReadPositiveInt("Enter number of nights: ");
+
+        // Auto-generate guest ID from the current size of the guests list (G001, G002, ...).
+        string guestId = $"G{(guests.Count + 1):D3}";
+
+        Guest newGuest = new Guest(guestId, name, checkInDate, totalNights, "Not Assigned");
+        guests.Add(newGuest);
+
+        Console.WriteLine("\nGuest registered successfully!");
+        Console.WriteLine($"  Guest ID      : {newGuest.GuestId}");
+        Console.WriteLine($"  Guest Name    : {newGuest.GuestName}");
+        Console.WriteLine($"  Check-In Date : {newGuest.CheckInDate}");
+        Console.WriteLine($"  Total Nights  : {newGuest.TotalNights}");
+        Console.WriteLine($"  Room Number   : {newGuest.RoomNumber}");
+    }
+}
+}
 
 
 
