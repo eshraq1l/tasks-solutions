@@ -500,4 +500,59 @@
         Console.WriteLine($"Room {room.RoomNumber} is now available: {roomNowAvailable}");
     }
 }
+{
+    public static partial class Program
+{
+    // Shared predicate so the preview (Where) and the removal (RemoveAll)
+    // use exactly the same logic, as required.
+    private static bool IsRoomSafelyRemovable(Room r)
+    {
+        return !r.IsAvailable && !guests.Any(g => g.RoomNumber == r.RoomNumber.ToString());
+    }
+
+    // Case 12 | Remove Unavailable Rooms | 20 pts
+    private static void Case12_RemoveUnavailableRooms()
+    {
+        Console.WriteLine("\n--- Remove Unavailable Rooms ---");
+
+        var removable = rooms.Where(r => IsRoomSafelyRemovable(r))
+                              .OrderBy(r => r.RoomNumber)
+                              .ToList();
+
+        if (!removable.Any())
+        {
+            Console.WriteLine("All unavailable rooms are currently occupied. No rooms can be decommissioned.");
+            return;
+        }
+
+        Console.WriteLine("Safely removable rooms:");
+        foreach (var r in removable)
+        {
+            Console.WriteLine($"  Room {r.RoomNumber} | Type: {r.RoomType} | Price: OMR {r.PricePerNight:F2}");
+        }
+
+        Console.WriteLine($"\nTotal removable rooms: {removable.Count}");
+        Console.Write("Confirm removal? (Y/N): ");
+        string confirm = Console.ReadLine()?.Trim().ToUpper();
+
+        if (confirm != "Y")
+        {
+            Console.WriteLine("No rooms removed.");
+            return;
+        }
+
+        // Single-statement removal using RemoveAll() with the identical logic.
+        rooms.RemoveAll(r => IsRoomSafelyRemovable(r));
+
+        Console.WriteLine($"\nRooms removed. Updated total room count: {rooms.Count}");
+        Console.WriteLine("Remaining rooms:");
+
+        var remaining = rooms.Select(r => new { r.RoomNumber, r.RoomType });
+        foreach (var r in remaining)
+        {
+            Console.WriteLine($"  Room {r.RoomNumber} — {r.RoomType}");
+        }
+    }
 }
+
+
