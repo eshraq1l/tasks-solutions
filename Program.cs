@@ -676,3 +676,37 @@
         }
     }
 }
+// Represents a single guest registered in the hotel system.
+public class Guest
+{
+    public string GuestId { get; set; }
+    public string GuestName { get; set; }
+    public string RoomNumber { get; set; }   // "Not Assigned" until a room is booked
+    public string CheckInDate { get; set; }
+    public int TotalNights { get; set; }
+
+    public Guest(string guestId, string guestName, string checkInDate, int totalNights,
+                 string roomNumber = "Not Assigned")
+    {
+        GuestId = guestId;
+        GuestName = guestName;
+        CheckInDate = checkInDate;
+        TotalNights = totalNights;
+        RoomNumber = roomNumber;
+    }
+
+    public void DisplayGuest()
+    {
+        Console.WriteLine(
+            $"ID: {GuestId} | Name: {GuestName,-15} | Room: {RoomNumber,-12} | Check-in: {CheckInDate,-10} | Nights: {TotalNights}");
+    }
+
+    // The linked Room's price per night is looked up by the caller and passed in here,
+    // since Guest itself only stores the room number, not the room's price.
+    public double CalculateTotalCost(double pricePerNight)
+    {
+        return pricePerNight * TotalNights;
+    }
+}
+}
+
