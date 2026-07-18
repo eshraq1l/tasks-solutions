@@ -434,3 +434,70 @@
         }
     }
 }
+{
+    public static partial class Program
+{
+    // Case 11 | Check Out a Guest | 20 pts
+    private static void Case11_CheckOutGuest()
+    {
+        Console.WriteLine("\n--- Check Out a Guest ---");
+
+        string guestId = ReadNonEmptyString("Enter guest ID: ");
+
+        // FirstOrDefault() lookup #1 - guest.
+        Guest guest = guests.FirstOrDefault(g => g.GuestId.Equals(guestId, StringComparison.OrdinalIgnoreCase));
+
+        if (guest == null)
+        {
+            Console.WriteLine($"Error: No guest found with ID '{guestId}'.");
+            return;
+        }
+
+        if (guest.RoomNumber == "Not Assigned")
+        {
+            Console.WriteLine("This guest has no active booking.");
+            return;
+        }
+
+        // FirstOrDefault() lookup #2 - linked room.
+        Room room = rooms.FirstOrDefault(r => r.RoomNumber.ToString() == guest.RoomNumber);
+
+        if (room == null)
+        {
+            Console.WriteLine("Error: Linked room could not be found. Data inconsistency detected.");
+            return;
+        }
+
+        double totalCost = guest.CalculateTotalCost(room.PricePerNight);
+
+        Console.WriteLine("\nFinal Bill");
+        Console.WriteLine($"  Guest Name    : {guest.GuestName}");
+        Console.WriteLine($"  Room Number   : {room.RoomNumber}");
+        Console.WriteLine($"  Room Type     : {room.RoomType}");
+        Console.WriteLine($"  Check-In Date : {guest.CheckInDate}");
+        Console.WriteLine($"  Total Nights  : {guest.TotalNights}");
+        Console.WriteLine($"  Price/Night   : OMR {room.PricePerNight:F2}");
+        Console.WriteLine($"  Total Cost    : OMR {totalCost:F2}");
+
+        Console.Write("\nConfirm checkout? (Y/N): ");
+        string confirm = Console.ReadLine()?.Trim().ToUpper();
+
+        if (confirm != "Y")
+        {
+            Console.WriteLine("Checkout cancelled. No changes made.");
+            return;
+        }
+
+        // Free the room BEFORE removing the guest, then remove the guest with Remove().
+        room.IsAvailable = true;
+        guests.Remove(guest);
+
+        Console.WriteLine("\nCheckout complete!");
+        Console.WriteLine($"Remaining guests: {guests.Count}");
+        Console.WriteLine($"Total rooms: {rooms.Count}");
+
+        bool roomNowAvailable = rooms.Any(r => r.RoomNumber == room.RoomNumber && r.IsAvailable);
+        Console.WriteLine($"Room {room.RoomNumber} is now available: {roomNowAvailable}");
+    }
+}
+}
