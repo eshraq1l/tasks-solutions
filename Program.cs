@@ -114,6 +114,29 @@
     Console.WriteLine($"  Total Nights : {guest.TotalNights}");
     Console.WriteLine($"  Total Cost   : OMR {totalCost:F2}");
 }
+{
+    public static partial class Program
+{
+    // Case 04 | View All Rooms | 10 pts
+    private static void Case04_ViewAllRooms()
+    {
+        Console.WriteLine("\n--- View All Rooms ---");
+
+        if (!rooms.Any())
+        {
+            Console.WriteLine("No rooms have been added yet.");
+            return;
+        }
+
+        Console.WriteLine($"Total rooms: {rooms.Count()}\n");
+
+        // Sorted by room number ascending using OrderBy() - no manual sort.
+        var sortedRooms = rooms.OrderBy(r => r.RoomNumber);
+
+        foreach (Room room in sortedRooms)
+        {
+            room.DisplayRoom();
+        }
     }
 }
 
